@@ -12,7 +12,7 @@ class Comment(models.Model):
     com_text = models.TextField(null=True, blank=True)
     com_like = models.BooleanField(default=False)
     com_author = models.ForeignKey(User, on_delete=models.CASCADE)
-    com_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE, related_name='comment_author')
+    com_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE, related_name='comments')
     com_date = models.DateTimeField(auto_now_add=True, null=True)
 
 

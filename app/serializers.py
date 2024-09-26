@@ -15,12 +15,15 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PublicationSerializer(serializers.ModelSerializer):
+
+    comment = CommentSerializer(source='comments', many=True, read_only=True)
+    image = ImageSerializer(source='images', many=True, read_only=True)
+
+    likes_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Publication
-        fields = ['id', 'pub_text', 'pub_author', 'pub_date']
+        fields = ['id', 'pub_text', 'pub_author', 'pub_date', 'comment', 'image', 'likes_count']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['comment'] = CommentSerializer(instance.comment_author.all(), many=True).data
-        representation['image'] = ImageSerializer(instance.images.all(), many=True).data
-        return representation
+    def get_likes_count(self, obj):
+        return obj.comments.filter(com_like=True).count()
