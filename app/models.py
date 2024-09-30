@@ -22,5 +22,7 @@ class Image(models.Model):
 
 
 class Coordinate(models.Model):
-    coor = models.CharField(null=True, blank=True)
-    coor_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    coor_text = models.CharField(null=True, blank=True)
+    coor_adress = models.CharField(null=True, blank=True)
+    coor_coordinates = models.CharField(null=True, blank=True)
+    coor_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE, related_name='coordinates')

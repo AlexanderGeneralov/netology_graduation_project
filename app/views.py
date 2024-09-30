@@ -2,8 +2,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Image, Publication, Comment
-from .serializers import ImageSerializer, PublicationSerializer, CommentSerializer
+from .models import Image, Publication, Comment, Coordinate
+from .serializers import ImageSerializer, PublicationSerializer, CommentSerializer, \
+    CoordinateViewSerializer, CoordinateCreateUpdateSerializer
 
 
 @api_view(['POST'])
@@ -32,3 +33,16 @@ class ImageViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class CoordinateViewSet(viewsets.ModelViewSet):
+    queryset = Coordinate.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return CoordinateViewSerializer
+        else:
+            return CoordinateCreateUpdateSerializer
+
+
+
