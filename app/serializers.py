@@ -16,7 +16,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['com_text', 'com_like', 'com_date', 'com_author', 'com_to_pub']
 
 
-class CoordinateCreateUpdateSerializer(serializers.ModelSerializer):
+class CoordinateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         coor_text = validated_data['coor_text']
@@ -30,21 +30,14 @@ class CoordinateCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coordinate
-        fields = ['coor_text', 'coor_to_pub']
-
-
-class CoordinateViewSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Coordinate
-        fields = ['coor_adress']
+        fields = ['coor_text', 'coor_adress', 'coor_to_pub']
 
 
 class PublicationSerializer(serializers.ModelSerializer):
 
     comment = CommentSerializer(source='comments', many=True, read_only=True)
     image = ImageSerializer(source='images', many=True, read_only=True)
-    coordinate = CoordinateViewSerializer(source='coordinates', many=True, required=True)
+    coordinate = CoordinateSerializer(source='coordinates', many=True, read_only=True)
 
     likes_count = serializers.SerializerMethodField()
 
