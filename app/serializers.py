@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ['image']
+        fields = ['id', 'image', 'image_to_pub']
 
 
 class CommentSerializer(serializers.ModelSerializer):

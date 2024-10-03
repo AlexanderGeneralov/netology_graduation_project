@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Image, Publication, Comment, Coordinate
-from .permissions import IsCreatorOrReadOnly
+from .permissions import ImagePermission, ImageAuthorPermission
 from .serializers import ImageSerializer, PublicationSerializer, CommentSerializer, \
     CoordinateSerializer
 
@@ -26,19 +26,11 @@ class PublicationViewSet(viewsets.ModelViewSet):
     queryset = Publication.objects.all()
     serializer_class = PublicationSerializer
 
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            return []
-        if self.action in ["create"]:
-            return [IsAuthenticated()]
-        if self.action in ["update", "partial_update", "destroy"]:
-            return [IsAuthenticated(), IsCreatorOrReadOnly()]
-        return []
-
 
 class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    permission_classes = [ImagePermission]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
