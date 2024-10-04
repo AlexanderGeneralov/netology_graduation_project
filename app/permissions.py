@@ -1,23 +1,10 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from .models import Publication
+
+EDIT_METHODS = ['PUT', 'PATCH']
 
 
-class IsCreatorOrReadOnly(BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        #if request.method == 'GET':
-        #    return True
-
-        if obj.pub_author == request.user:
-            return True
-
-        return False
-
-
-class ImagePermission(BasePermission):
-
-    edit_methods = ['PUT', 'PATCH']
+class PublicationPermission(BasePermission):
 
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
@@ -26,24 +13,61 @@ class ImagePermission(BasePermission):
             return True
 
     def has_object_permission(self, request, view, obj):
-
-        if request.user.is_superuser:
-            return True
-
         if request.method in SAFE_METHODS:
             return True
-
-        if request.user.id == Publication.objects.get(id=obj.image_to_pub_id).pub_author_id:
+        if request.user.id == obj.pub_author.id:
+            return True
+        if request.user.is_staff and request.method not in EDIT_METHODS:
             return True
 
-        if request.user.is_staff and request.method not in self.edit_methods:
+
+class ImagePermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
             return True
 
-        return False
-
-
-class ImageAuthorPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.user.id == Publication.objects.get(id=obj.image_to_pub_id).pub_author_id:
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.id == obj.image_to_pub.pub_author.id:
+            return True
+        if request.user.is_staff and request.method not in EDIT_METHODS:
+            return True
+
+
+class CoordinatePermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.id == obj.coor_to_pub.pub_author.id:
+            return True
+        if request.user.is_staff and request.method not in EDIT_METHODS:
             return True
         return False
+
+
+class CommentPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.id == obj.com_author.id:
+            return True
+        if request.user.is_staff and request.method not in EDIT_METHODS:
+            return True

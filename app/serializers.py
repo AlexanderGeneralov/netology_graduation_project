@@ -5,12 +5,14 @@ from geopy.geocoders import Nominatim
 
 
 class ImageSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Image
         fields = ['id', 'image', 'image_to_pub']
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
         fields = ['com_text', 'com_like', 'com_date', 'com_author', 'com_to_pub']
@@ -30,7 +32,7 @@ class CoordinateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coordinate
-        fields = ['coor_text', 'coor_adress', 'coor_to_pub']
+        fields = ['id', 'coor_text', 'coor_adress', 'coor_to_pub']
 
 
 class PublicationSerializer(serializers.ModelSerializer):
