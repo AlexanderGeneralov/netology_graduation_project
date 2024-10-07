@@ -16,6 +16,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['com_text', 'com_like', 'com_date', 'com_author', 'com_to_pub']
+        read_only_fields = ['com_author']
+
+    def create(self, validated_data):
+        validated_data['com_author'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 class CoordinateSerializer(serializers.ModelSerializer):
@@ -32,7 +37,8 @@ class CoordinateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coordinate
-        fields = ['id', 'coor_text', 'coor_adress', 'coor_to_pub']
+        fields = ['id', 'coor_text', 'coor_adress', 'coor_coordinates', 'coor_to_pub']
+        read_only_fields = ['coor_adress', 'coor_coordinates']
 
 
 class PublicationSerializer(serializers.ModelSerializer):
@@ -46,6 +52,11 @@ class PublicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publication
         fields = ['id', 'pub_text', 'pub_author', 'pub_date', 'comment', 'image', 'likes_count', 'coordinate']
+        read_only_fields = ['pub_author']
 
     def get_likes_count(self, obj):
         return obj.comments.filter(com_like=True).count()
+
+    def create(self, validated_data):
+        validated_data['pub_author'] = self.context['request'].user
+        return super().create(validated_data)
