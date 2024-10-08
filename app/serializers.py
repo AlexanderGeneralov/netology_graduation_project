@@ -5,27 +5,43 @@ from geopy.geocoders import Nominatim
 
 
 class ImageSerializer(serializers.ModelSerializer):
-
+    """
+    Class to describe image serializer.
+    """
     class Meta:
         model = Image
         fields = ['id', 'image', 'image_to_pub']
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
+    """
+    Class to describe comment serializer.
+    """
     class Meta:
         model = Comment
         fields = ['com_text', 'com_like', 'com_date', 'com_author', 'com_to_pub']
         read_only_fields = ['com_author']
 
     def create(self, validated_data):
+        """
+        Method to implicitly add user to serialized data.
+        :param validated_data: data from http request
+        :return: method of parent class
+        """
         validated_data['com_author'] = self.context['request'].user
         return super().create(validated_data)
 
 
 class CoordinateSerializer(serializers.ModelSerializer):
-
+    """
+    Class to describe coordinate serializer.
+    """
     def create(self, validated_data):
+        """
+        Method to implicitly add calculated geodata to serialized data.
+        :param validated_data: data from http request
+        :return: method of parent class
+        """
         coor_text = validated_data['coor_text']
         geolocator = Nominatim(user_agent='epictalk')
         location = geolocator.geocode(coor_text)
@@ -42,12 +58,13 @@ class CoordinateSerializer(serializers.ModelSerializer):
 
 
 class PublicationSerializer(serializers.ModelSerializer):
-
-    comment = CommentSerializer(source='comments', many=True, read_only=True)
-    image = ImageSerializer(source='images', many=True, read_only=True)
-    coordinate = CoordinateSerializer(source='coordinates', many=True, read_only=True)
-
-    likes_count = serializers.SerializerMethodField()
+    """
+    Class to describe publication serializer.
+    """
+    comment = CommentSerializer(source='comments', many=True, read_only=True)  # adding extra field
+    image = ImageSerializer(source='images', many=True, read_only=True)  # adding extra field
+    coordinate = CoordinateSerializer(source='coordinates', many=True, read_only=True)  # adding extra field
+    likes_count = serializers.SerializerMethodField()  # adding extra field
 
     class Meta:
         model = Publication
@@ -55,8 +72,18 @@ class PublicationSerializer(serializers.ModelSerializer):
         read_only_fields = ['pub_author']
 
     def get_likes_count(self, obj):
+        """
+        Method to calculate number of likes to publication
+        :param obj: publication model instance
+        :return: object (likes_count) to be serialized as extra field to publication
+        """
         return obj.comments.filter(com_like=True).count()
 
     def create(self, validated_data):
+        """
+        Method to implicitly add user to serialized data.
+        :param validated_data: data from http request
+        :return: method of parent class
+        """
         validated_data['pub_author'] = self.context['request'].user
         return super().create(validated_data)

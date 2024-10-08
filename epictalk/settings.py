@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'epictalk',
         'USER': 'postgres',
-        'PASSWORD': 'dacent0000',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 5432
     }
