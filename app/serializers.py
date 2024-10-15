@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Publication, Comment, Image, Coordinate
+from .models import Publication, Comment, Image, Coordinate, Like
 
 from geopy.geocoders import Nominatim
 
@@ -77,7 +77,7 @@ class PublicationSerializer(serializers.ModelSerializer):
         :param obj: publication model instance
         :return: object (likes_count) to be serialized as extra field to publication
         """
-        return obj.comments.filter(com_like=True).count()
+        return obj.likes.filter(like_bool=True).count()
 
     def create(self, validated_data):
         """
@@ -86,4 +86,20 @@ class PublicationSerializer(serializers.ModelSerializer):
         :return: method of parent class
         """
         validated_data['pub_author'] = self.context['request'].user
+        return super().create(validated_data)
+
+
+class LikeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Like
+        fields = ['id', 'like_bool', 'like_to_pub', 'like_author']
+        read_only_fields = ['like_author']
+
+    def create(self, validated_data):
+        author = self.context['request'].user
+        like_to_pub = validated_data['like_to_pub']
+        if Like.objects.filter(like_author=author, like_to_pub=like_to_pub).exists():
+            raise serializers.ValidationError('do not fool with likes)')
+        validated_data['like_author'] = self.context['request'].user
         return super().create(validated_data)

@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 
-from .models import Image, Publication, Comment, Coordinate
-from .permissions import PublicationPermission, ImagePermission, CommentPermission, CoordinatePermission
+from .models import Image, Publication, Comment, Coordinate, Like
+from .permissions import PublicationPermission, ImagePermission, CommentPermission, CoordinatePermission, LikePermission
 from .serializers import ImageSerializer, PublicationSerializer, CommentSerializer, \
-    CoordinateSerializer
+    CoordinateSerializer, LikeSerializer
 
 
 class PublicationViewSet(viewsets.ModelViewSet):
@@ -40,3 +40,9 @@ class CoordinateViewSet(viewsets.ModelViewSet):
     queryset = Coordinate.objects.all()
     serializer_class = CoordinateSerializer
     permission_classes = [CoordinatePermission]
+
+
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [LikePermission]

@@ -10,6 +10,9 @@ class Publication(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     pub_author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.id)
+
 
 class Comment(models.Model):
     """
@@ -38,3 +41,9 @@ class Coordinate(models.Model):
     coor_adress = models.CharField(null=True, blank=True)
     coor_coordinates = models.CharField(null=True, blank=True)
     coor_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE, related_name='coordinates')
+
+
+class Like(models.Model):
+    like_bool = models.BooleanField(default=False)
+    like_to_pub = models.ForeignKey(Publication, on_delete=models.CASCADE, related_name='likes')
+    like_author = models.ForeignKey(User, on_delete=models.CASCADE)

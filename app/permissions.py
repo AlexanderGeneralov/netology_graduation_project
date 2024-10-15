@@ -131,3 +131,21 @@ class CommentPermission(BasePermission):
             return True
         if request.user.is_staff and request.method not in EDIT_METHODS:
             return True
+
+
+class LikePermission(BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return True
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in SAFE_METHODS:
+            return True
+        if request.user.id == obj.like_to_pub.id:
+            return True
+        if request.user.is_staff and request.method not in EDIT_METHODS:
+            return True
