@@ -1,0 +1,19 @@
+{% extends 'epictalk/layout.html' %}
+{% block content %}
+{% load static %}
+
+    {% for pub in pubs %}
+        <article>
+            <h1>{{ pub.pub_text }}</h1>
+            {% if pub.images.all %}
+                {% for image in pub.images.all|slice:":1" %}
+                    <img src="{{ image.image.url }}">
+                {% endfor %}
+            {% else %}
+                <img src="{% static 'epictalk/default.jpg' %}">
+            {% endif %}
+
+        </article>
+    {% endfor %}
+
+{% endblock %}

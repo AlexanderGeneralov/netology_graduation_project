@@ -58,7 +58,7 @@ ROOT_URLCONF = 'epictalk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'epictalk',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'dacent0000',
         'HOST': 'localhost',
         'PORT': 5432
     }
@@ -139,3 +139,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

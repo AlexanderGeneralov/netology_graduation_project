@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Epictalk</title>
+    <link rel="stylesheet", type="text/css", href="{% static 'epictalk/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Epicktalk</h1>
+        <a href="">Create post</a>
+        <nav>
+            <a href="">Login</a>
+            <a href="">Register</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>generalov.studio 2025</p>
+    </footer>
+</body>
+</html>
