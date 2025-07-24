@@ -2,9 +2,9 @@
 {% block content %}
 {% load static %}
 
-    {% for pub in pubs %}
-        <article>
-            <h1>{{ pub.pub_text }}</h1>
+    {% for pub in page_obj %}
+        <div class="pub-box">
+            <div class="pub-box-inner">
             {% if pub.images.all %}
                 {% for image in pub.images.all|slice:":1" %}
                     <img src="{{ image.image.url }}">
@@ -12,8 +12,49 @@
             {% else %}
                 <img src="{% static 'epictalk/default.jpg' %}">
             {% endif %}
+            </div>
+            <div class="pub-box-inner">
+                <div class="pub-box-details"><h1>{{ pub.pub_text }}</h1></div>
+                <div class="pub-box-details"><h1>comments</h1></div>
+                <div class="pub-box-details"><h1>likes</h1></div>
+            </div>
+        </div>
 
-        </article>
     {% endfor %}
+
+    <div class="pagination-box">
+        <div>
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">prev </a>
+    {% if page_obj.number > 3 %}
+        <a href="?page=1"> 1 </a>
+    {% if page_obj.number > 4 %}
+        <a>...</a>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+        <a href="?page={{ num }}"> {{ num }} </a>
+    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}"> {{ num }} </a>
+    {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+            <a>...</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}"> {{ page_obj.paginator.num_pages }} </a>
+        {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+            <a href="?page={{ page_obj.paginator.num_pages }}"> {{ page_obj.paginator.num_pages }} </a>
+        {% endif %}
+
+        <a href="?page={{ page_obj.next_page_number }}"> next</a>
+    {% endif %}
+
+        </div>
+    </div>
+
 
 {% endblock %}

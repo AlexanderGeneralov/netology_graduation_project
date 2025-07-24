@@ -16,6 +16,11 @@ class Publication(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name = "Публикация"
+        verbose_name_plural = "Публикации"
+        ordering = ["-pub_date"]
+
 
 class Comment(models.Model):
     """

@@ -12,7 +12,7 @@ def pub_list_view(request):
     paginator = Paginator(pubs, 2)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    context = {"pubs": pubs}
+    context = {"page_obj": page_obj}
     return render(request, "epictalk/pub_list.html", context)
 
 
